@@ -1,5 +1,8 @@
 package com.pollingApp.pollingApp.services;
 
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.stereotype.Service;
 
 import com.pollingApp.pollingApp.models.Poll;
@@ -15,5 +18,13 @@ public class PollService {
 
     public Poll createPoll(Poll poll) {
         return pollRepository.save(poll);
+    }
+
+    public List<Poll> getAllPolls() {
+        return pollRepository.findAll();
+    }
+
+    public Optional<Poll> getPollById(Long id) {
+         return pollRepository.findById(id);
     }
 }

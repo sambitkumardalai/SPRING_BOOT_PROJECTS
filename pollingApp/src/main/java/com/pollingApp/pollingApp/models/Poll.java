@@ -16,16 +16,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Poll {
     @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String question;
 
-
     @ElementCollection
-    private List<String> options = new ArrayList<>();
+    private List<OptionVote> options = new ArrayList<>();
 
-    @ElementCollection
-    private List<String> votes = new ArrayList<>();
-
-    
 }
