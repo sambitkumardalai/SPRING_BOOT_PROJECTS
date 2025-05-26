@@ -31,25 +31,3 @@ build/
 
 ### VS Code ###
 .vscode/
-# Node modules - DO NOT commit to Git
-node_modules/
-**/node_modules/
-
-# Build artifacts from Tailwind or other tools
-dist/
-build/
-
-# Tailwind CSS generated files (if applicable)
-*.css.map
-*.tmp.css
-tailwind.config.js
-postcss.config.js
-
-# Optional - OS/system specific ignores
-.DS_Store
-Thumbs.db
-
-# IDE-specific
-.idea/
-.vscode/
-*.iml
