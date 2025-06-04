@@ -12,6 +12,7 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
 import jakarta.persistence.OneToMany;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,6 +27,7 @@ public class User {
     @Id
     private String id;
     @Column(nullable = false)
+    @NotBlank(message = "User is required.")
     private String name;
     @Column(nullable = false, unique = true)    
     private String email;
@@ -44,4 +46,4 @@ public class User {
 
      @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<Contact> contacts = new ArrayList<>();
-} 
+}
