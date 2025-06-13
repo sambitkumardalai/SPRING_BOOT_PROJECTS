@@ -1,10 +1,10 @@
-package com.pollingApp.pollingApp;
+package com.voting.votingApp;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class PollingAppApplicationTests {
+class VotingAppApplicationTests {
 
 	@Test
 	void contextLoads() {
