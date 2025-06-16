@@ -22,8 +22,8 @@ public class Poll {
     private String question;
 
     @ElementCollection
-    private List<String> options = new ArrayList<>();
+    private List<OptionVote> options = new ArrayList<>();
 
-    @ElementCollection
-    private List<Long> votes = new ArrayList<>();
+    // @ElementCollection
+    // private List<Long> votes = new ArrayList<>();
 }
