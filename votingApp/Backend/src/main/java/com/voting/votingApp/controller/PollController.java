@@ -3,6 +3,7 @@ package com.voting.votingApp.controller;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,6 +17,7 @@ import com.voting.votingApp.service.PollService;
 
 @RestController
 @RequestMapping("/api/polls")
+@CrossOrigin(origins = "http://localhost:4200/")
 public class PollController {
 
     private final PollService pollService;
@@ -25,9 +27,8 @@ public class PollController {
     }
 
     @PostMapping
-    public String createPoll(@RequestBody Poll poll) {
-        Poll createdPoll = pollService.createPoll(poll);
-        return "Poll created with ID: " + createdPoll.getId();
+    public Poll createPoll(@RequestBody Poll poll) {
+        return pollService.createPoll(poll);
     }
 
     @GetMapping
