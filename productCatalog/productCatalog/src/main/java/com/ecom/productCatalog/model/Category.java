@@ -1,4 +1,4 @@
-package model;
+package com.ecom.productCatalog.model;
 
 import java.util.Set;
 
