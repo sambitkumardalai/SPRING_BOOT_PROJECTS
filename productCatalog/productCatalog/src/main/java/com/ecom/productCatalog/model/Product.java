@@ -1,5 +1,7 @@
 package com.ecom.productCatalog.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -20,7 +22,8 @@ public class Product {
 	private Double price;
 
 	@ManyToOne
-	@JoinColumn
+	@JoinColumn(name = "category_id", nullable = false)
+	@JsonBackReference
 	private Category category;
 
 	public Long getId() {
