@@ -11,4 +11,8 @@ public interface CategoryService {
 	public boolean existCategory(String name);
 
 	public List<Category> getAllCategory();
+	public Category getCategoryById(int id);
+	
+	public Boolean deleteCategory(int id); 
+	
 }
