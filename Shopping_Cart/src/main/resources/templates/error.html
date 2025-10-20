@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Error</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+</head>
+<body>
+<h2 th:text="${message}"></h2>
+
+<!-- Show extra debug info only in dev -->
+<div th:if="${profile} == 'dev'">
+    <h4>Debug Info:</h4>
+    <p><strong>URL:</strong> <span th:text="${url}"></span></p>
+    <p><strong>Exception:</strong> <span th:text="${exception}"></span></p>
+    <pre th:text="${#strings.arrayJoin(stackTrace, '\n')}"></pre>
+</div>
+</body>
+</html>
