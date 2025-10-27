@@ -92,4 +92,10 @@ public class ProductServiceImpl implements ProductService {
 		return null;
 	}
 
+	@Override
+	public List<Product> getAllActiveProducts() {
+		List<Product> products = productRepo.findByIsActiveTrue();
+		return products;
+	}
+
 }

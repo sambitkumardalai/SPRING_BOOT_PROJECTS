@@ -20,7 +20,7 @@ public class CategoryServiceImpl implements CategoryService {
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
 	@Autowired
-	private CategoryRepository categoryRepo;
+	private CategoryRepository categoryRepository;
 
 	CategoryServiceImpl(ShoppingCartApplication shoppingCartApplication) {
 		this.shoppingCartApplication = shoppingCartApplication;
@@ -28,17 +28,17 @@ public class CategoryServiceImpl implements CategoryService {
 
 	@Override
 	public Category saveCategory(Category category) {
-		return categoryRepo.save(category);
+		return categoryRepository.save(category);
 	}
 
 	@Override
 	public List<Category> getAllCategory() {
-		return categoryRepo.findAll();
+		return categoryRepository.findAll();
 	}
 
 	@Override
 	public boolean existCategory(String name) {
-		return categoryRepo.existsByName(name);
+		return categoryRepository.existsByName(name);
 	}
 
 	@Override
@@ -48,9 +48,9 @@ public class CategoryServiceImpl implements CategoryService {
 		 * jdbcTemplate.update(sql,id) > 0;
 		 */
 
-		Category cat = categoryRepo.findById(id).orElse(null);
+		Category cat = categoryRepository.findById(id).orElse(null);
 		if (!ObjectUtils.isEmpty(cat)) {
-			categoryRepo.delete(cat);
+			categoryRepository.delete(cat);
 			return true;
 		}
 		return false;
@@ -58,7 +58,13 @@ public class CategoryServiceImpl implements CategoryService {
 
 	@Override
 	public Category getCategoryById(int id) {
-		return categoryRepo.findById(id).orElse(null);
+		return categoryRepository.findById(id).orElse(null);
+	}
+
+	@Override
+	public List<Category> getAllActiveCategory() {
+		List<Category> categories = categoryRepository.findByIsActiveTrue();
+		return categories;
 	}
 
 }
