@@ -10,4 +10,6 @@ public interface UserService {
 	public boolean unlockAccountTimeExpired(UserDtls userDtls);
 
 	public void userAccountLock(UserDtls userDtls);
+
+	public UserDtls getUserByEmail(String email);
 }
