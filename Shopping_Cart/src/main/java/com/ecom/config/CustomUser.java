@@ -33,6 +33,10 @@ public class CustomUser implements UserDetails {
 		return user.getEmail();
 	}
 
+	@Override
+	public boolean isEnabled() {
+		return user.getIsEnable();
+	}
 	/*
 	 * @Override public boolean isAccountNonExpired() { return true; }
 	 * 
@@ -41,7 +45,7 @@ public class CustomUser implements UserDetails {
 	 * 
 	 * @Override public boolean isCredentialsNonExpired() { return true; }
 	 * 
-	 * @Override public boolean isEnabled() { return user.getIsEnable(); }
+	 * }
 	 */
 
 }

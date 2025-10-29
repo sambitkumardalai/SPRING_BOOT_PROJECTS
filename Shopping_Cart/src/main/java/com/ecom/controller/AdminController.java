@@ -11,6 +11,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.ObjectUtils;
@@ -37,6 +38,8 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RequestMapping("/admin")
 public class AdminController {
+
+	private final UserDetailsService userDetailsService;
 	@Autowired
 	private CategoryService categoryService;
 	@Autowired
@@ -44,22 +47,26 @@ public class AdminController {
 	@Autowired
 	private UserService userService;
 
-	public void getUserDetails(Principal p,Model m) { 
-		if(p!=null) {
+	AdminController(UserDetailsService userDetailsService) {
+		this.userDetailsService = userDetailsService;
+	}
+
+	public void getUserDetails(Principal p, Model m) {
+		if (p != null) {
 			String email = p.getName();
 			UserDtls userDtls = userService.getUserByEmail(email);
-			m.addAttribute("user",userDtls);
+			m.addAttribute("user", userDtls);
 		}
-		
+
 		List<Category> allActiveCategory = categoryService.getAllActiveCategory();
 		m.addAttribute("categorys", allActiveCategory);
 	}
-	
+
 	@GetMapping({ "", "/" })
 	public String index() {
 		return "admin/index";
 	}
-	
+
 	@GetMapping("/loadAddProduct")
 	public String loadAddProduct(Model m) {
 		List<Category> categories = categoryService.getAllCategory();
@@ -229,4 +236,23 @@ public class AdminController {
 		}
 		return "redirect:/admin/editProduct/" + product.getId();
 	}
+
+	@GetMapping("/users")
+	public String getAllUsers(Model m) {
+		List<UserDtls> users = userService.getUsers("ROLE_USER");
+		m.addAttribute("users", users);
+		return "/admin/users";
+	}
+
+	@GetMapping("/updateSts")
+	public String updateUserAccString(@RequestParam Boolean status, @RequestParam Integer id, HttpSession session) {
+		Boolean f = userService.updateAccountStatus(id, status);
+		if (f) {
+			session.setAttribute("succMsg", "Account status updated");
+		} else {
+			session.setAttribute("errorMsg", "Something wrong on server");
+		}
+		return "redirect:/admin/users";
+	}
+
 }

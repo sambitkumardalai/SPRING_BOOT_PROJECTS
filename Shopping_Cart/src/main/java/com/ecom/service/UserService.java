@@ -1,6 +1,9 @@
 package com.ecom.service;
 
+import java.util.List;
+
 import com.ecom.model.UserDtls;
+import com.ecom.repository.UserRepository;
 
 public interface UserService {
 	public UserDtls saveUser(UserDtls user);
@@ -12,4 +15,9 @@ public interface UserService {
 	public void userAccountLock(UserDtls userDtls);
 
 	public UserDtls getUserByEmail(String email);
+	
+	public List<UserDtls> getUsers(String role);
+	
+	public boolean updateAccountStatus(Integer id,Boolean status) ;
+	
 }
