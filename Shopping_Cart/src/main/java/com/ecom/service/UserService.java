@@ -19,5 +19,5 @@ public interface UserService {
 	public List<UserDtls> getUsers(String role);
 	
 	public boolean updateAccountStatus(Integer id,Boolean status) ;
-	
+	public void resetAttempt(int userId);
 }

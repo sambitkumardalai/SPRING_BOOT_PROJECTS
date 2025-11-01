@@ -17,10 +17,10 @@ public class SecurityConfig {
 
 	@Autowired
 	private AuthenticationSuccessHandler authenticationSuccessHandler;
-//	
-//	@Autowired
-//	@Lazy
-//	private AuthFailureHandlerImpl authenticationFailureHandler;
+	
+	@Autowired
+	@Lazy
+	private AuthFailureHandlerImpl authenticationFailureHandler;
 
 	@Bean
 	public PasswordEncoder passwordEncoder() {
@@ -47,6 +47,7 @@ public class SecurityConfig {
 						.requestMatchers("/admin/**").hasRole("ADMIN").requestMatchers("/**").permitAll())
 				.formLogin(form -> form.loginPage("/signin").loginProcessingUrl("/login")
 //						.defaultSuccessUrl("/")
+						.failureHandler(authenticationFailureHandler)
 						.successHandler(authenticationSuccessHandler))
 				.logout(logout -> logout.permitAll());
 

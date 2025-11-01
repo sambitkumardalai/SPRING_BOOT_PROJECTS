@@ -37,15 +37,20 @@ public class CustomUser implements UserDetails {
 	public boolean isEnabled() {
 		return user.getIsEnable();
 	}
-	/*
-	 * @Override public boolean isAccountNonExpired() { return true; }
-	 * 
-	 * @Override public boolean isAccountNonLocked() { return
-	 * user.getAccountNonLocked(); }
-	 * 
-	 * @Override public boolean isCredentialsNonExpired() { return true; }
-	 * 
-	 * }
-	 */
+
+	@Override
+	public boolean isAccountNonExpired() {
+		return true;
+	}
+
+	@Override
+	public boolean isAccountNonLocked() {
+		return user.getAccountNonLocked();
+	}
+
+	@Override
+	public boolean isCredentialsNonExpired() {
+		return true;
+	}
 
 }

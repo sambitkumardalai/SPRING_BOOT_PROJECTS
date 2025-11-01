@@ -37,4 +37,14 @@ public class UserDtls {
 	private Date lockTime;
 	private String resetToken;
 
+	@Override
+	public String toString() {
+	    return "UserDtls{" +
+	            "username='" + name + '\'' +
+	            ", email='" + email + '\'' +
+	            ", failedAttempt=" + failedAttempt +
+	            ", roles=" + role +
+	            '}';
+	}
+
 }
