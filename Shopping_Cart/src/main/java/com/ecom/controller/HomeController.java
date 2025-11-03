@@ -13,6 +13,7 @@ import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.ObjectUtils;
@@ -49,7 +50,8 @@ public class HomeController {
 	UserService userService;
 	@Autowired
 	private CommonUtil commonUtil;
-	
+	@Autowired
+	private BCryptPasswordEncoder passwordEncoder;
 	
 	@ModelAttribute
 	public void getUserDetails(Principal p, Model m) {
@@ -142,7 +144,37 @@ public class HomeController {
 				session.setAttribute("errorMsg", "Somethong wrong on server ! Email not send");
 			}
 		}
-		return "redirec:/forgot-password";
+		return "redirect:/forgot-password";
 	}
+	@GetMapping("/reset-password")
+	public String showResetPassword(@RequestParam String token, HttpSession session, Model m) {
 
+		UserDtls userByToken = userService.getUserByToken(token);
+
+		if (userByToken == null) {
+			m.addAttribute("msg", "Your link is invalid or expired !!");
+			return "message";
+		}
+		m.addAttribute("token", token);
+		return "reset_password";
+	}
+	@PostMapping("/reset-password")
+	public String resetPassword(@RequestParam String token, @RequestParam String password, HttpSession session,
+			Model m) {
+
+		UserDtls userByToken = userService.getUserByToken(token);
+		if (userByToken == null) {
+			m.addAttribute("errorMsg", "Your link is invalid or expired !!");
+			return "message";
+		} else {
+			userByToken.setPassword(passwordEncoder.encode(password));
+			userByToken.setResetToken(null);
+			userService.updateUser(userByToken);
+			// session.setAttribute("succMsg", "Password change successfully");
+			m.addAttribute("msg", "Password change successfully");
+
+			return "message";
+		}
+
+	}
 }
