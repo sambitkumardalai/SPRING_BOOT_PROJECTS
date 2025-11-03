@@ -2,12 +2,14 @@ package com.ecom.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.security.Principal;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
@@ -26,9 +28,12 @@ import com.ecom.model.UserDtls;
 import com.ecom.service.CategoryService;
 import com.ecom.service.ProductService;
 import com.ecom.service.UserService;
+import com.ecom.util.CommonUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import jakarta.mail.MessagingException;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 
@@ -42,15 +47,18 @@ public class HomeController {
 	CategoryService categoryService;
 	@Autowired
 	UserService userService;
+	@Autowired
+	private CommonUtil commonUtil;
+	
 	
 	@ModelAttribute
-	public void getUserDetails(Principal p,Model m) { 
-		if(p!=null) {
+	public void getUserDetails(Principal p, Model m) {
+		if (p != null) {
 			String email = p.getName();
 			UserDtls userDtls = userService.getUserByEmail(email);
-			m.addAttribute("user",userDtls);
+			m.addAttribute("user", userDtls);
 		}
-		
+
 		List<Category> allActiveCategory = categoryService.getAllActiveCategory();
 		m.addAttribute("categorys", allActiveCategory);
 	}
@@ -107,6 +115,34 @@ public class HomeController {
 		}
 
 		return "redirect:/register";
+	}
+
+	@GetMapping("/forgot-password")
+	public String showForgotPassword() {
+		return "forgot_password.html";
+	}
+
+	@PostMapping("forgot-password")
+	public String processForgotPassword(@RequestParam String email, HttpSession session, HttpServletRequest request) throws UnsupportedEncodingException, MessagingException {
+		UserDtls userByEmail = userService.getUserByEmail(email);
+
+		if (userByEmail == null) {
+			session.setAttribute("errorMsg", "Invalid email");
+		} else {
+			String resetToken = UUID.randomUUID().toString();
+			userService.updateUserResetToken(email, resetToken);
+
+			String url = CommonUtil.generateUrl(request) + "/reset-password?token=" + resetToken;
+
+			Boolean sendMail = commonUtil.sendMail(url, email);
+
+			if (sendMail) {
+				session.setAttribute("succMsg", "Please check your email..Password Reset link sent");
+			} else {
+				session.setAttribute("errorMsg", "Somethong wrong on server ! Email not send");
+			}
+		}
+		return "redirec:/forgot-password";
 	}
 
 }

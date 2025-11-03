@@ -20,4 +20,6 @@ public interface UserService {
 	
 	public boolean updateAccountStatus(Integer id,Boolean status) ;
 	public void resetAttempt(int userId);
+
+	public void updateUserResetToken(String email, String resetToken);
 }
