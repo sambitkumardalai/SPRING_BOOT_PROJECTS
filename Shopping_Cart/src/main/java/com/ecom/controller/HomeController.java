@@ -19,6 +19,7 @@ import org.springframework.ui.Model;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
@@ -52,7 +53,7 @@ public class HomeController {
 	private CommonUtil commonUtil;
 	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
-	
+
 	@ModelAttribute
 	public void getUserDetails(Principal p, Model m) {
 		if (p != null) {
@@ -94,6 +95,13 @@ public class HomeController {
 		return "product";
 	}
 
+	@GetMapping("/product/{id}")
+	public String product(@PathVariable int id, Model m) {
+		Product productById = productService.getProductById(id);
+		m.addAttribute("product", productById);
+		return "view_product";
+	}
+
 	@PostMapping("saveUser")
 	public String saveUser(@ModelAttribute UserDtls user, @RequestParam("img") MultipartFile file, HttpSession session)
 			throws IOException {
@@ -125,7 +133,8 @@ public class HomeController {
 	}
 
 	@PostMapping("forgot-password")
-	public String processForgotPassword(@RequestParam String email, HttpSession session, HttpServletRequest request) throws UnsupportedEncodingException, MessagingException {
+	public String processForgotPassword(@RequestParam String email, HttpSession session, HttpServletRequest request)
+			throws UnsupportedEncodingException, MessagingException {
 		UserDtls userByEmail = userService.getUserByEmail(email);
 
 		if (userByEmail == null) {
@@ -146,6 +155,7 @@ public class HomeController {
 		}
 		return "redirect:/forgot-password";
 	}
+
 	@GetMapping("/reset-password")
 	public String showResetPassword(@RequestParam String token, HttpSession session, Model m) {
 
@@ -158,6 +168,7 @@ public class HomeController {
 		m.addAttribute("token", token);
 		return "reset_password";
 	}
+
 	@PostMapping("/reset-password")
 	public String resetPassword(@RequestParam String token, @RequestParam String password, HttpSession session,
 			Model m) {
